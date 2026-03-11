@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global HNP Premium - Video Update</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .video-card:hover { transform: scale(1.05); transition: 0.3s; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <nav class="bg-black p-4 text-center border-b border-yellow-500">
+        <h1 class="text-2xl font-bold text-yellow-500">HNP GLOBAL COLLECTION 🗿</h1>
+    </nav>
+
+    <div class="container mx-auto p-6">
+        <div id="ads-top" class="bg-gray-800 h-24 mb-6 flex items-center justify-center border border-dashed border-gray-600">
+            <span class="text-gray-500">Space Iklan (Banner)</span>
+        </div>
+
+        <div id="video-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            </div>
+    </div>
+
+    <script>
+        async function loadVideos() {
+            // Nanti di sini kita hubungkan ke API buat ambil data dari MongoDB
+            const grid = document.getElementById('video-grid');
+            // Contoh tampilan sementara
+            for(let i=0; i<8; i++) {
+                grid.innerHTML += `
+                <div class="video-card bg-gray-800 rounded-lg overflow-hidden shadow-lg cursor-pointer">
+                    <img src="https://via.placeholder.com/300x200" class="w-full h-40 object-cover">
+                    <div class="p-3 text-sm font-semibold truncate">Sample Video Title Global ${i}</div>
+                </div>`;
+            }
+        }
+        loadVideos();
+    </script>
+</body>
+</html>
+
