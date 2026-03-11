@@ -1,0 +1,22 @@
+name: HNP-Auto-Cuan
+on:
+  schedule:
+    - cron: '0 * * * *' # Jalan tiap jam otomatis
+  workflow_dispatch: # Biar bisa diklik manual
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install Lib
+        run: pip install requests beautifulsoup4 pymongo dnspython
+      - name: Run Robot
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: python bot.py
+        
