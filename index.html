@@ -1,15 +1,28 @@
-const baseUrl = "https://cloud.mongodb.com/api/atlas/v1.0";
-const groupId = "69b192e00de4ad3d0f659aa1"; // Ambil angka setelah /v2/ di URL browser lu
+// Ganti KODE_PROJECT sesuai yang ada di URL Atlas lu (69b19...)
+const PROJECT_ID = "69b192e00de4ad3d0f659aa1"; 
+const API_KEY = "Al-fUeIjQRrh6-CcTUUa9fFYSN93OGW5ASrCPrV1rLD4Wx";
 
-async function getData() {
-    // Kita pake Fetch langsung ke API Atlas
-    const response = await fetch(`${baseUrl}/groups/${groupId}/clusters/Cluster0`, {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-    });
-    const data = await response.json();
-    console.log("Data Ketemu:", data);
+async function ambilVideo() {
+    try {
+        const response = await fetch(`https://data.mongodb-api.com/app/data-backend/endpoint/data/v1/action/find`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'api-key': API_KEY
+            },
+            body: JSON.stringify({
+                "dataSource": "Cluster0",
+                "database": "hnp_database",
+                "collection": "videos", // sesuaikan nama collection lu
+                "filter": {}
+            })
+        });
+        
+        const result = await response.json();
+        console.log("Dapet nih videonya:", result.documents);
+        // Di sini lu tinggal tampilin ke HTML
+    } catch (error) {
+        console.error("Masih gagal asu:", error);
+    }
 }
 
