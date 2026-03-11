@@ -3,37 +3,46 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import os
 
-# Ambil URI dari secret GitHub
+# Koneksi ke Gudang HNP
 MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client['hnp_database']
 collection = db['videos_global']
 
-def gas_nyolong():
-    # Contoh target awal (nanti kita ganti ke target asli yang lebih ganas)
-    url = "https://www.google.com" 
-    headers = {'User-Agent': 'Mozilla/5.0'}
+def hunter_mode():
+    # GANTI URL ini dengan situs target global lu (contoh situs video)
+    target_url = "https://www.example-video-site.com/latest-updates" 
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     
     try:
-        print("Robot HNP mulai memantau target...")
+        print(f"HNP Hunter sedang memantau: {target_url}")
+        response = requests.get(target_url, headers=headers, timeout=15)
+        soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Test simpan satu data ke MongoDB buat mastiin koneksi lancar
-        data_test = {
-            "title": "HNP Digital Test", 
-            "link": "https://hnp-production.com/test", 
-            "status": "ready_to_cuan"
-        }
-        
-        # Cek dlu biar gak double
-        if not collection.find_one({"title": "HNP Digital Test"}):
-            collection.insert_one(data_test)
-            print("Berhasil! Data test masuk ke MongoDB Atlas.")
-        else:
-            print("Data test udah ada di gudang.")
+        # Logika mencari kotak video (Sesuaikan class-nya nanti)
+        # Biasanya video ada di dalam tag <a> atau <div> tertentu
+        count = 0
+        for vid in soup.find_all('div', class_='video-block'): # Ini contoh class
+            title = vid.find('img')['alt'] # Ambil judul dari alt gambar
+            link = vid.find('a')['href']  # Ambil link detail
+            thumb = vid.find('img')['src'] # Ambil gambar cover
             
+            # Masukin ke database kalau belum ada
+            if not collection.find_one({"link": link}):
+                collection.insert_one({
+                    "title": title,
+                    "link": link,
+                    "thumbnail": thumb,
+                    "source": "Global_Site_1",
+                    "status": "active"
+                })
+                count += 1
+        
+        print(f"Selesai! Berhasil nyolong {count} link baru hari ini.")
+        
     except Exception as e:
-        print(f"Error pas nyoba konek: {e}")
+        print(f"Hunter gagal operasional: {e}")
 
 if __name__ == "__main__":
-    gas_nyolong()
-  
+    hunter_mode()
+    
