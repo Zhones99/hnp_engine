@@ -1,47 +1,15 @@
-<script>
-    async function loadVideos() {
-        const grid = document.getElementById('video-grid');
-        
-        // PASTE URL ENDPOINT DATA API LU DI SINI (Contoh: https://data.mongodb-api.com/...)
-        const ENDPOINT = 'MASUKKAN_URL_ENDPOINT_LU_DI_SINI'; 
-        // PASTE API KEY DARI SCREENSHOT TADI
-        const API_KEY = 'Al-fUeIjQRrh6-CcTUUa9fFYSN93OGW5ASrCPrV1rLD4Wx'; 
+const baseUrl = "https://cloud.mongodb.com/api/atlas/v1.0";
+const groupId = "69b192e00de4ad3d0f659aa1"; // Ambil angka setelah /v2/ di URL browser lu
 
-        try {
-            const response = await fetch(`${ENDPOINT}/action/find`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'api-key': API_KEY
-                },
-                body: JSON.stringify({
-                    dataSource: "Cluster0",
-                    database: "hnp_database",
-                    collection: "videos_global",
-                    filter: {},
-                    limit: 40
-                })
-            });
-
-            const data = await response.json();
-            const videos = data.documents;
-
-            grid.innerHTML = ''; 
-            
-            videos.forEach(vid => {
-                grid.innerHTML += `
-                <div class="video-card bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                    <a href="${vid.link}" target="_blank">
-                        <img src="${vid.thumbnail}" class="w-full h-40 object-cover" onerror="this.src='https://via.placeholder.com/300x200?text=HNP+Media'">
-                        <div class="p-3 text-sm font-semibold truncate text-white">${vid.title}</div>
-                    </a>
-                </div>`;
-            });
-        } catch (error) {
-            grid.innerHTML = '<p class="text-red-500 col-span-full text-center">Gagal memuat data. Cek settingan Data API!</p>';
-            console.error(error);
+async function getData() {
+    // Kita pake Fetch langsung ke API Atlas
+    const response = await fetch(`${baseUrl}/groups/${groupId}/clusters/Cluster0`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
         }
-    }
-    loadVideos();
-</script>
+    });
+    const data = await response.json();
+    console.log("Data Ketemu:", data);
+}
 
